@@ -1,5 +1,6 @@
 PDIR = ..
 DATADIR = $(PDIR)/Data
+PREFIX := $(HOME)/.lua
 CDIR = $(PDIR)/C
 LUADIR = $(PDIR)/Lua
 BINDIR = $(PDIR)/Bin
@@ -26,6 +27,16 @@ constants: $(CONSTANTSDEF)
 	@cp $(LUADIR)/lNotify/lNotify.lua $(BUILDSHAREDDIR)/lNotify
 	@cp $(LUADIR)/lNotify/Constants.lua $(BUILDSHAREDDIR)/lNotify
 	@cp $(LUADIR)/struct.lua $(BUILDSHAREDDIR)
+
+install: all
+	@echo " == Installing lNotify.lua == "
+	@mkdir -p $(PREFIX)/share/
+	@cp -r $(BUILDSHAREDDIR)/lNotify $(PREFIX)/share
+	@cp -r $(BUILDSHAREDDIR)/struct.lua $(PREFIX)/share/lNotify
+
+uninstall: 
+	@echo " == Uninstalling lNotify.lua == "
+	@rm -rf $(PREFIX)/share/lNotify
 
 clean:
 	@echo " ==== Cleaning Lua files ==== "

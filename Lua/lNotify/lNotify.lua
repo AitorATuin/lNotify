@@ -1,14 +1,34 @@
 module("lNotify", package.seeall)
 require "luarocks.require"
 require "alien"
-require "struct"
 require "bit"
 require "lNotify.Constants"
+require "lNotify.struct"
 
-local SOPATH = os.getenv("lNOTIFY_SO")
+local SOPATH = os.getenv("lNOTIFYSO_DIR") or "/usr/lib/lua"
+local PATHS = {
+    os.getenv("LNOTIFYSODIR") or "./",
+    os.getenv("HOME") .. "/.lua/lib/",
+}
+for p in package.cpath:gmatch("[^;]+") do
+    PATHS[#PATHS+1] = p:match("(.+)/+[^/]+$")
+end
+
+local liblnotify, success
+for _, p in ipairs(PATHS) do
+    success, liblnotify = pcall(alien.load,
+        p.."/liblnotify.0.1.so")
+    if success then
+        break
+    end
+end
+
+if not success then
+    error("Could not load liblnotify.0.1.so")
+end
+
 
 local libc = alien.default
-local liblnotify = alien.load((SOPATH or "").."/liblnotify.0.1.so")
 local band = bit.band
 
 -- Structs

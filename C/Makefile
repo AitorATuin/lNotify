@@ -1,4 +1,5 @@
 PDIR = ..
+PREFIX := $(HOME)/.lua
 DATADIR = $(PDIR)/Data
 BUILDLIBDIR = $(PDIR)/Build/Library
 CC := gcc
@@ -19,6 +20,15 @@ liblnotify: lnotify.o
 lnotify.o:
 	@echo "  --> lnotify.o [CC]"
 	@$(CC) $(CCOPTS) -D_DEBUG=$(DEBUG) -c lnotify.c
+
+install: all
+	@echo " === Installing $(LIBNOTIFYSO) === "
+	@mkdir -p $(PREFIX)/lib/
+	@cp $(BUILDLIBDIR)/$(LIBNOTIFYSO) $(PREFIX)/lib
+
+uninstall:
+	@echo " === Uninstalling $(LIBNOTIFYSO) === "
+	@rm -rf $(PREFIX)/lib/$(LIBNOTIFYSO)
 
 clean:
 	@echo " ==== Cleaning C module ==== "

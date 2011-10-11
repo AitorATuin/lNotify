@@ -1,4 +1,8 @@
-package.path = package.path .. ";Build/Shared/?.lua;Build/Shared/?/?.lua"
+local HOME = os.getenv("HOME")
+local LOCALLUAPATH = HOME .. "/.lua/share/?.lua;" .. HOME ..  "/.lua/share/?/?.lua"
+
+package.path = package.path .. ";" .. LOCALLUAPATH
+
 require "luarocks.require"
 require "lNotify"
 require "lanes"
@@ -12,7 +16,7 @@ local bor = bit.bor
 
 -- function to be executed in the thread
 local function _thread ()
-	package.path = package.path .. ";Build/Shared/?.lua;Build/Shared/?/?.lua"
+	package.path = package.path .. ";" .. LOCALLUAPATH
 	pcall(require, "lNotify")
 	-- Required to create a new copy of the notify
 	local notify = lNotify.NewNotifyFromMemory(linda:get("notify"))
