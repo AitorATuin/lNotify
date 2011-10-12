@@ -20,43 +20,42 @@ local function _thread ()
 	pcall(require, "lNotify")
 	-- Required to create a new copy of the notify
 	local notify = lNotify.NewNotifyFromMemory(linda:get("notify"))
+    local DevicesToSearch = linda:get("DevicesToSearch")
 	local msg = linda:receive(0.3, "master")
+    for i,v in pairs(DevicesToSearch) do
+        print(i,v)
+    end
 	while msg ~= "STOP" do
 		notify:read()
 		for ev in notify:events() do
 			local str = ""
-			if ev:IN_ISDIR() then
-				str = string.format("directory '%s/%s'", notify:pathForWatch(ev.WD), ev.Name)
-			else
-				str = string.format("file '%s/%s'", notify:pathForWatch(ev.WD), ev.Name)
-			end
-			if ev:IN_MOVE() then
-				print(string.format("  - MOVED %s", str))
-			elseif ev:IN_CLOSE() then
-				print(string.format("  - CLOSED %s", str))
-			elseif ev:IN_CREATE() then
-				print(string.format("  - CREATED %s", str))
-			elseif ev:IN_DELETE() then
-				print(string.format("  - DELETED %s", str))
-			elseif ev:IN_MODIFY() then
-				print(string.format("  - MODIFIED %s", str))
-			elseif ev:IN_OPEN() then
-				print(string.format("  - OPENED %s", str))
-			elseif band(ev.Mask, bor(lNotify.IN_ACCESS, lNotify.IN_ATTRIB)) then
-				print(string.format("  - ACCESSED %s", str))
-			else
-				print(string.format("  - UNKNOW EVENT %s", str))
-			end
+			if not ev:IN_ISDIR() and ev.Name ~= "ptmx" then
+                if DevicesToSearch[ev.Name] then
+--				str = string.format("file '%s/%s'", notify:pathForWatch(ev.WD), ev.Name)
+                   if ev:IN_CREATE() then
+                        print(string.format("  - CREATED %s", ev.Name))
+                    elseif ev:IN_DELETE() then
+                        print(string.format("  - DELETED %s", ev.Name))
+                    end
+                end
+            end
 		end
 	end
 end
 
+DevicesToSearch = {
+    sdc1 = true,
+    sdc2 = true,
+    sdc3 = true
+}
+
 local function main (argc, argv)
 	print("Creando Notifier")
 	local myNotify = lNotify.NewNotify()
-	print("\t*Adding Watch: /tmp")
+	print("\t*Adding Watch: /dev")
 	myNotify:addWatch("/dev/", lNotify.IN_ALL_EVENTS)
 	linda:set("notify", myNotify)
+    linda:set("DevicesToSearch", DevicesToSearch)
 	print("Launching events thread")
 	lanes.gen("*", _thread)()
 	os.execute("sleep 300")

@@ -4,7 +4,6 @@ lNotify=$PWD CD=. {
 		Makefile
 		struct.lua
 		lNotify=lNotify CD=. {
-			Constants.lua
 			lNotify.lua
 		}
 	}
@@ -19,5 +18,6 @@ lNotify=$PWD CD=. {
 	}
 	Test=Test CD=. {
 		notifyTest.lua
+        deviceMounter.lua
 	}
 }

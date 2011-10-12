@@ -123,7 +123,7 @@ s_inotifyev.new = function (s_proto, ptr)
 		if key == "Name" then
 			local str = ""
 			if tt.Length > 0 then
-				for i=0, tt.Length do
+				for i=0, tt.Length-1 do
 					str = string.format("%s%c",str,
 						tt():get(s_proto.offsets[key]+1+i, "char"))
 				end
