@@ -1,4 +1,4 @@
-PDIR = 
+PDIR =
 VER = 0.1
 DEBUG := 0
 PREFIX := $(HOME)/.lua/
@@ -13,20 +13,20 @@ build:
 	@echo "======================="
 	@echo "= Building Lua module ="
 	@echo "======================="
-	@mkdir -p Build/Shared/lNotify
+	@mkdir -p Build/Shared/iNotify
 	@cd Lua && make
 
 
 install: build
 	@echo "====================="
-	@echo "= Instaling lNotify ="
+	@echo "= Instaling iNotify ="
 	@echo "====================="
 	@cd C && make install PREFIX=$(PREFIX)
 	@cd Lua && make install PREFIX=$(PREFIX)
 
 uninstall:
 	@echo "====================="
-	@echo "= Uninstalling lNotify ="
+	@echo "= Uninstalling iNotify ="
 	@echo "====================="
 	@cd C && make uninstall PREFIX=$(PREFIX)
 	@cd Lua && make uninstall PREFIX=$(PREFIX)
@@ -41,4 +41,3 @@ clean:
 	@echo "====================="
 	@cd C && make clean
 	@rm -rf Build
-	

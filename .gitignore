@@ -16,3 +16,7 @@
 *.exe
 *.out
 *.app
+Build
+C/iNotifyConstants.c
+Data/iNotifyConstants
+Lua/iNotify/Constants.lua

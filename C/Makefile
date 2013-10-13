@@ -4,22 +4,22 @@ DATADIR = $(PDIR)/Data
 BUILDLIBDIR = $(PDIR)/Build/Library
 CC := gcc
 DEBUG := 0
-CCOPTS := -g
+CCOPTS := -g -fPIC
 
 LIBNOTIFYVER = 0.1
-LIBNOTIFYNAME = liblnotify
+LIBNOTIFYNAME = libinotify
 LIBNOTIFYSO = $(LIBNOTIFYNAME).$(LIBNOTIFYVER).so
 
-all: liblnotify
+all: libinotify
 
-liblnotify: lnotify.o
+libinotify: inotify.o
 	@echo " ==== Building Signal Library ===="
 	@echo "  --> $(LIBNOTIFYSO) [LD]"
-	@$(CC) -g $(CCOPTS) -shared -Wl,-soname,$(LIBNOTIFYSO) -o $(BUILDLIBDIR)/$(LIBNOTIFYSO) lnotify.o
+	@$(CC) -g $(CCOPTS) -shared -Wl,-soname,$(LIBNOTIFYSO) -o $(BUILDLIBDIR)/$(LIBNOTIFYSO) inotify.o
 
-lnotify.o:
+inotify.o:
 	@echo "  --> lnotify.o [CC]"
-	@$(CC) $(CCOPTS) -D_DEBUG=$(DEBUG) -c lnotify.c
+	@$(CC) $(CCOPTS) -D_DEBUG=$(DEBUG) -c inotify.c
 
 install: all
 	@echo " === Installing $(LIBNOTIFYSO) === "
@@ -32,8 +32,6 @@ uninstall:
 
 clean:
 	@echo " ==== Cleaning C module ==== "
-	@rm lnotify.o 2>/dev/null || true
+	@rm inotify.o 2>/dev/null || true
 	@rm $(LIBNOTIFYSO).0.1  2>/dev/null || true
 	@rm $(BUILDLIBDIR)/$(LIBNOTIFYSO) 2>/dev/null || true
-
-
