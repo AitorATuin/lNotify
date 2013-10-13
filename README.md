@@ -1,4 +1,4 @@
-lNotify
+luaiNotify
 =======
 
 Lua binding (using alien) to the [inotify linux kernel subsystem] (http://man7.org/linux/man-pages/man7/inotify.7.html).
@@ -6,8 +6,32 @@ Lua binding (using alien) to the [inotify linux kernel subsystem] (http://man7.o
 Instalation
 ===========
 
-Example Usage
-=============
+luaiNotify can be installed directly into your $HOME directory just by typing:
+
+    make install
+
+This will install the library under $HOME/.lua/ so you can use luaiNotify by adding that directory to *package.path* as follows:
+
+```lua
+local HOME = os.getenv("HOME")
+local LOCALLUAPATH = HOME .. "/.lua/share/?.lua;" .. HOME ..  "/.lua/share/?/?.lua"
+package.path = package.path .. ";" .. LOCALLUAPATH
+```
+
+Now, you are ready to use it!.
+
+Usage
+=====
+
+When requiring the "iNotify" module, it gives you just one function called *configure*, this functions doesnt take any parameter and (as its name says) configure the module to be used properly.
+```lua
+local iNotify = require "iNotify".configure()
+```
+
+Examples
+========
+
+This is just a lua implementation of this [example] (http://www.thegeekstuff.com/2010/04/inotify-c-program-example/)
 
 ```lua
 require "luarocks.require"
@@ -40,3 +64,8 @@ end
 
 myNotify:kill()
 ```
+
+TODO
+====
+- [ ] Add luarocks support
+- [ ] Implement loop dispatcher
